@@ -1,0 +1,66 @@
+syntax = "proto3";
+package msg;
+
+// 所有表示状态、索引、ID、位置的数据 默认0表示无或者无效
+
+enum MSGID
+{
+    FLAG          = 0;
+    Req           = 0X1000;   // 请求消息
+    Ack           = 0X2000;   // 回复消息
+    Msg           = 0X4000;   // 主动下发消息
+
+    Login         = 0X0010;
+    LoginQueue    = 0X0012;
+    HeartBeat     = 0X0020;
+
+}
+
+// 用户登录
+message LoginReq
+{
+    string uid             = 1;    // 用户ID
+}
+
+// 用户登录回复
+message LoginAck
+{
+    int32 result           = 1;    // 1-成功, 2-重复登录 3-排队中
+    string token           = 2;    //登录成功拿到的令牌
+}
+
+// 排完对之后时发送
+message LoginMsg
+{
+    int32 result           = 1;    // 1-成功
+    string token           = 2;    //登录成功拿到的令牌
+}
+
+// 请求排队信息
+message LoginQueueReq
+{
+}
+
+message LoginQueueAck
+{
+    int32 result           = 1;    // 1-成功, 其他表示玩家未排队
+    int32 pos              = 2;    // 用户位置
+    int32 num              = 3;    // 排队人数
+}
+
+// 用户排队信息 进入排队或者排队信息变化发送
+message LoginQueueMsg
+{
+    int32 pos              = 1;    // 用户位置
+    int32 num              = 2;    // 排队人数
+}
+
+// 心跳
+message HeartBeatReq
+{
+}
+
+// 心跳回复
+message HeartBeatAck
+{
+}
